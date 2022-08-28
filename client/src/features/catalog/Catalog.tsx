@@ -9,12 +9,14 @@ import {
   Typography,
 } from "@mui/material";
 import ProductList from "./ProductList";
-import { Product } from "../../app/models/Product";
+import Product from "../../app/models/Product";
 
 const Catalog = () => {
   const [data, setData] = useState<Product[]>([]);
 
   useEffect(() => {
+    console.log('gggg');
+    
     fetch(import.meta.env.VITE_API_URL + "/apiproducts")
       .then((res) => res.json())
       .then((json) => setData(json))

@@ -5,10 +5,42 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import { styled, Switch } from "@mui/material";
+import {
+  Badge,
+  BadgeProps,
+  List,
+  ListItem,
+  styled,
+  Switch,
+} from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { NavLink } from "react-router-dom";
+
+const midLinks = [
+  { title: "catalog", path: "/catalog" },
+  { title: "about", path: "/about" },
+  { title: "contact", path: "/contact" },
+];
+
+const rightLinks = [
+  { title: "login", path: "/login" },
+  { title: "register", path: "/register" },
+];
+
+const navStyles = {
+  color: "inherit",
+  textDecoration: "none",
+  typography: "h6",
+  "&:hover": {
+    color: "grey.500",
+  },
+  "&.active": {
+    color: "text.secondary",
+  },
+};
 
 const Header = ({ handleMode, themeMode }: any) => {
-  const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  const SwitchChangeTheme = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
     padding: 7,
@@ -56,23 +88,72 @@ const Header = ({ handleMode, themeMode }: any) => {
     },
   }));
 
+  const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+    "& .MuiBadge-badge": {
+      right: -3,
+      top: 13,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: "0 4px",
+    },
+  }));
+
   return (
     <Box sx={{ flexGrow: 1, mb: 10 }}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MaterialUISwitch checked={themeMode} onChange={handleMode} />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Beaver Store
-          </Typography>
-          <Button color="inherit">Login</Button>
+        <Toolbar
+          sx={{
+            direction: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <SwitchChangeTheme checked={themeMode} onChange={handleMode} />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Beaver Store
+            </Typography>
+          </Box>
+
+          <List sx={{ display: "flex" }}>
+            {midLinks.map(({ title, path }: any, index) => (
+              <ListItem
+                key={index}
+                component={NavLink}
+                to={path}
+                sx={navStyles}
+              >
+                {title}
+              </ListItem>
+            ))}
+          </List>
+
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton aria-label="cart">
+              <StyledBadge badgeContent={4} color="secondary">
+                <ShoppingCartIcon />
+              </StyledBadge>
+            </IconButton>
+            <List sx={{ display: "flex" }}>
+              {rightLinks.map(({ title, path }: any, index) => (
+                <ListItem
+                  key={index}
+                  component={NavLink}
+                  to={path}
+                  sx={navStyles}
+                >
+                  {title}
+                </ListItem>
+              ))}
+            </List>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

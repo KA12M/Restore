@@ -16,6 +16,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 
 import { Product } from "../../app/models/Product";
+import { Link } from "react-router-dom";
 
 interface Props {
   item: Product;
@@ -68,6 +69,9 @@ const ProductCard = ({ item }: Props) => {
         </CardContent>
         <CardActions sx={{ marginTop: "auto" }}>
           <Button size="small">Add to cart</Button>
+          <Button size="small" component={Link} to={"/catalog/" + item.id}>
+            View
+          </Button>
         </CardActions>
       </Card>
     </Grid>
