@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import Header from "./Header";
-import Catalog from "../../features/catalog/Catalog";
 import { Container } from "@mui/system";
+
+import Header from "./Header";
+import Catalog from "../../features/catalog/Catalog"; 
 
 const App = () => {
   const [themeMode, setThemeMode] = useState(false);
