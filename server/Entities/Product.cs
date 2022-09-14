@@ -1,6 +1,5 @@
 
-
-namespace API.Entities
+namespace server.Entities
 {
     public class Product
     {

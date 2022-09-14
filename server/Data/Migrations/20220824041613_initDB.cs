@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace API.Data.Migrations
+namespace server.Data.Migrations
 {
     public partial class initDB : Migration
     {

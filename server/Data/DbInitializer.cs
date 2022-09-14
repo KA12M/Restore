@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Entities;
+using server.Entities;
 
-namespace API.Data
+namespace server.Data
 {
     public class DbInitializer
     {

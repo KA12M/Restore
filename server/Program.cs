@@ -1,5 +1,6 @@
-using API.Data;
+using server.Data;
 using Microsoft.EntityFrameworkCore;
+using server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ builder.Services.AddCors(options =>
                             policy.AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials()
-                            .WithOrigins("http://localhost:5173");
+                            .WithOrigins("http://localhost:5173", "http://127.0.0.1:5173");
                         });
 });
 #endregion
@@ -48,13 +49,14 @@ catch (Exception ex)
 #endregion
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // app.UseHttpsRedirection();
+
+#region ส่ง error ไปให้ Axios ตอนทำ Interceptor
+app.UseMiddleware<ExceptionMiddleware>();
+#endregion
 
 app.UseRouting();
 

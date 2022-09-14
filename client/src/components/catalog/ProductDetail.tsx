@@ -11,25 +11,25 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import agent from "../../app/api/agent";
+import NotFound from "../../app/errors/NotFound";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import Product from "../../app/models/Product";
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: any }>();
   const [data, setData] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      axios
-        .get(import.meta.env.VITE_API_URL + "/apiproducts/" + id)
-        .then((res) => setData(res.data))
-        .catch((err) => console.error(err))
-        .finally(() => setIsLoading(false));
-    }, 1000);
+    agent.Catalog.details(id)
+      .then((res: any) => setData(res))
+      .catch((err) => console.error(err))
+      .finally(() => setIsLoading(false));
   }, [id]);
 
-  if (isLoading) return <h1>loading...</h1>;
-  else if (!data) return <h1>Product not found!</h1>;
+  if (isLoading) return <LoadingComponent message="Loading Product....." />;
+  else if (!data) return <NotFound />;
 
   return (
     <Grid container spacing={6}>

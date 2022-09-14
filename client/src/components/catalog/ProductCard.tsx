@@ -15,7 +15,7 @@ import React from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 
-import { Product } from "../../app/models/Product";
+import Product from "../../app/models/Product";
 import { Link } from "react-router-dom";
 
 interface Props {

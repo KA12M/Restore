@@ -7,21 +7,25 @@ import {
   CardMedia,
   Grid,
   Typography,
-} from "@mui/material";
+} from "@mui/material"; 
+
+import agent from "../../app/api/agent";
 import ProductList from "./ProductList";
 import Product from "../../app/models/Product";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 const Catalog = () => {
   const [data, setData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    console.log('gggg');
-    
-    fetch(import.meta.env.VITE_API_URL + "/apiproducts")
-      .then((res) => res.json())
-      .then((json) => setData(json))
-      .catch((err) => console.log(err));
+  useEffect(() => {  
+    agent.Catalog.list()
+      .then((res: any) => setData(res))
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) return <LoadingComponent message="Loading Products....." />;
 
   return (
     <Grid

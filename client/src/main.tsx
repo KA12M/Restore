@@ -1,12 +1,19 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./app/layout/App";
+import ReactDOM from "react-dom/client"; 
+import App from "./app/layout/App"; 
+import 'react-toastify/dist/ReactToastify.css';
+
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import { ToastContainer } from "react-toastify";
+
+export const history = createBrowserHistory({ window });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HistoryRouter history={history}>
       <App />
-    </BrowserRouter>
+      <ToastContainer />
+    </HistoryRouter>
   </React.StrictMode>
 );
