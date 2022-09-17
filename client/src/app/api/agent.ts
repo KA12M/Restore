@@ -5,7 +5,9 @@ import { toast } from "react-toastify";
 
 import { history } from "../../main";
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;          
+
+axios.defaults.withCredentials = true;
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -47,24 +49,35 @@ axios.interceptors.response.use(
   }
 );
 
-const requests = {
+const req = {
   get: (url: string) => axios.get(url).then(ResponseBody),
+  post: (url: string, body: object = {}) => axios.post(url, body).then(ResponseBody),
+  delete: (url: string) => axios.delete(url).then(ResponseBody),
 };
 
 const Catalog = {
-  list: () => requests.get("ApiProducts"),
-  details: (id: number) => requests.get(`ApiProducts/${id}`),
+  list: () => req.get("ApiProducts"),
+  details: (id: number) => req.get(`ApiProducts/${id}`),
 };
 
+const Basket = {
+  getBasket: () => req.get("ApiBasket/GetBasket"),
+  addBasket: (productId: number, quantity: number = 1) => 
+    req.post(`ApiBasket/AddItemToBasket?productId=${productId}&quantity=${quantity}`),
+  removeBasket: (productId: number, quantity: number = 1) => 
+    req.delete(`ApiBasket/RemoveBasketItem?productId=${productId}&quantity=${quantity}`)
+}
+
 const TestError = {
-  get400Error: () => requests.get("buggy/GetBadRequest"),
-  get401Error: () => requests.get("buggy/GetUnAuthorized"),
-  get404Error: () => requests.get("Buggy/GetNotFound"),
-  get500Error: () => requests.get("buggy/GetServerError"),
-  getValidationError: () => requests.get("buggy/GetValidationError"),
+  get400Error: () => req.get("buggy/GetBadRequest"),
+  get401Error: () => req.get("buggy/GetUnAuthorized"),
+  get404Error: () => req.get("Buggy/GetNotFound"),
+  get500Error: () => req.get("buggy/GetServerError"),
+  getValidationError: () => req.get("buggy/GetValidationError"),
 };
 
 export default {
   Catalog,
   TestError,
+  Basket
 };

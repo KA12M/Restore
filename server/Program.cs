@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<StoreContext>(options =>
 {
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DatabaseConnection"));
 });
 
 #region CORS
@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
                             policy.AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials()
-                            .WithOrigins("http://localhost:5173", "http://127.0.0.1:5173");
+                            .WithOrigins("http://localhost:3001", "http://127.0.0.1:3001");
                         });
 });
 #endregion

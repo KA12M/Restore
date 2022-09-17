@@ -2,7 +2,7 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography"; 
+import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import {
   Badge,
@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { NavLink } from "react-router-dom";
+import { useStoreContext } from "../context/StroeContext";
+import { Link } from "react-router-dom";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -39,6 +41,9 @@ const navStyles = {
 };
 
 const Header = ({ handleMode, themeMode }: any) => {
+  const { basket } = useStoreContext();
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+  
   const SwitchChangeTheme = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
@@ -135,8 +140,8 @@ const Header = ({ handleMode, themeMode }: any) => {
           </List>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton aria-label="cart">
-              <StyledBadge badgeContent={4} color="secondary">
+            <IconButton component={Link} to="/basketpage" aria-label="cart" color="default">
+              <StyledBadge badgeContent={itemCount} color="secondary">
                 <ShoppingCartIcon />
               </StyledBadge>
             </IconButton>
