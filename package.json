@@ -7,9 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "cd server && dotnet run --port 7088",
     "client": "yarn --cwd client dev --port 3001",
-    "dev": "concurrently -k \"npm run client\" \"npm run server\""
+    "dev": "concurrently -k \"yarn client\" \"yarn server\"",
+    "setupserver": "cd server && dotnet restore",
+    "setupcliend": "cd client && yarn",
+    "setup": "concurrently \"yarn setupcliend\" \"yarn setupserver\""
   },
   "keywords": [],
   "author": "KARM <pj@example.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/express-serve-static-core": "^4.17.31"
+  }
 }
