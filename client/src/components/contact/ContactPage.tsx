@@ -1,9 +1,24 @@
-import React from 'react'
+import React from "react";
+import { ButtonGroup, Button } from "@mui/material";
+import { useAppDispatch, useAppSelector } from '../../app/store/store.config';
+import { decrement, increment } from "../../app/store/couter.slice";
 
 const ContactPage = () => {
-  return (
-    <div>ContactPage</div>
-  )
-}
+  const dispatch = useAppDispatch();
+  const {num} = useAppSelector(state => state.counter);
 
-export default ContactPage
+  return (
+    <> 
+      <ButtonGroup
+        variant="contained"
+        aria-label="outlined primary button group"
+      >
+        <Button onClick={() => dispatch(decrement())}>-</Button>
+        <Button>{num}</Button>
+        <Button onClick={() => dispatch(increment(5))}>+</Button>
+      </ButtonGroup>
+    </>
+  );
+};
+
+export default ContactPage;

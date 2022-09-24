@@ -11,34 +11,27 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { red } from "@mui/material/colors";
 
 import Product from "../../app/models/Product";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
-import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/context/StroeContext";
+import { useAppDispatch, useAppSelector } from "../../app/store/store.config";
+import { addBasketItemAsync } from '../../app/store/basket.slice';
 
 interface Props {
   item: Product;
 }
 
 const ProductCard = ({ item }: Props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
+  const { status } = useAppSelector((state) => state.basket);
 
   const haddleAddItem = async (productId: number) => {
-    setIsLoading(true);
-    agent.Basket.addBasket(productId)
-      .then((res) => {
-        console.log(res);
-        setBasket(res);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setIsLoading(false));
+    dispatch(addBasketItemAsync({productId}));
   };
+
   return (
     <Grid item lg={4} md={4} sm={6} xs={12}>
       <Card
@@ -86,7 +79,7 @@ const ProductCard = ({ item }: Props) => {
         <CardActions sx={{ marginTop: "auto" }}>
           <LoadingButton
             size="small"
-            loading={isLoading}
+            loading={status === "pendingAddItem" + item.id}
             onClick={() => haddleAddItem(item.id)}
           >
             Add to cart

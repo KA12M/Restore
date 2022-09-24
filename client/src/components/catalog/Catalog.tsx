@@ -7,25 +7,26 @@ import {
   CardMedia,
   Grid,
   Typography,
-} from "@mui/material"; 
+} from "@mui/material";
 
 import agent from "../../app/api/agent";
 import ProductList from "./ProductList";
 import Product from "../../app/models/Product";
 import LoadingComponent from "../../app/layout/LoadingComponent";
+import { useAppDispatch, useAppSelector } from '../../app/store/store.config';
+import { fetchProductsAsync, productSelectors } from "../../app/store/catalog.slice";
 
 const Catalog = () => {
-  const [data, setData] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {  
-    agent.Catalog.list()
-      .then((res: any) => setData(res))
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <LoadingComponent message="Loading Products....." />;
+  const data = useAppSelector(productSelectors.selectAll);
+  const { productsLoaded, status } = useAppSelector((state) => state.catalog);
+  const dispatch = useAppDispatch();
+  
+  useEffect(() => {
+    if (!productsLoaded) dispatch(fetchProductsAsync());
+  }, [productsLoaded, dispatch]);
+  
+  if (status.includes("pending"))
+    return <LoadingComponent message="Loading Products..." />;
 
   return (
     <Grid

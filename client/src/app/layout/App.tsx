@@ -17,20 +17,26 @@ import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import BasketPage from "../../components/basket/basketPage";
 import CheckoutPage from "../../components/checkout/checkoutPage";
+import { useAppSelector, useAppDispatch } from "../store/store.config"; 
+import { setBasket } from '../store/basket.slice';
 
 const App = () => {
-  const { setBasket } = useStoreContext();
-  const [loading, setLoading] = useState(true);
+  // from useStoreContext();
+  // const { setBasket } = useStoreContext();
+  const [loading, setLoading] = useState(true); 
+
+  const dispatch = useAppDispatch();
+  const { fullscreen } = useAppSelector((state) => state.screen);
 
   useEffect(() => {
     const buyerId = getCookie("buyerId");
     if (buyerId) {
       agent.Basket.getBasket()
-        .then((basket) => setBasket(basket))
+        .then((basket) => dispatch(setBasket(basket)))
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     } else setLoading(false);
-  }, [setBasket]);
+  }, [dispatch]);
 
   const [themeMode, setThemeMode] = useState(false);
 
@@ -42,6 +48,20 @@ const App = () => {
 
   const handleTheme = () => setThemeMode(!themeMode);
 
+  const MainRoute = (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/catalog" element={<Catalog />} />
+      <Route path="/catalog/:id" element={<ProductDetail />} />
+      <Route path="/basketpage" element={<BasketPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/server-error" element={<ServerError />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+
   if (loading) return <LoadingComponent message="Initilize App....." />;
 
   return (
@@ -49,19 +69,11 @@ const App = () => {
       <CssBaseline />
       <Header handleMode={handleTheme} themeMode={themeMode} />
 
-      <Container>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="/catalog/:id" element={<ProductDetail />} /> 
-          <Route path="/basketpage" element={<BasketPage />} /> 
-          <Route path="/checkout" element={<CheckoutPage />} /> 
-          <Route path="/server-error" element={<ServerError />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Container>
+      {fullscreen ? (
+        <>{MainRoute}</>
+      ) : (
+        <Container sx={{ marginTop: 10 }}>{MainRoute}</Container>
+      )}
     </ThemeProvider>
   );
 };

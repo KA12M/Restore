@@ -20,7 +20,9 @@ app.use(express.json());
 
 app.use(cors());
 
-app.get("/", (req, res) => {
+app.use('/', express.static('public'))
+
+app.get("/ok", (req, res) => {
   res.json({ result: "ok" });
 });
 

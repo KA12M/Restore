@@ -6,7 +6,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useStoreContext } from "../../app/context/StroeContext";
 
 const BaseUrl = import.meta.env.VITE_API_URL;
 import { Box, Button, Grid } from "@mui/material";
@@ -16,6 +15,13 @@ import { Add, Delete, Remove } from "@mui/icons-material";
 import agent from "../../app/api/agent";
 import BasketSummary from "./basketSummary";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/store.config";
+import {
+  setBasket,
+  removeItem,
+  addBasketItemAsync,
+  removeBasketItemAsync,
+} from "../../app/store/basket.slice";
 
 function createData(
   name: string,
@@ -36,32 +42,17 @@ const rows = [
 ];
 
 const BasketPage = () => {
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const dispatch = useAppDispatch();
+  const { basket, status } = useAppSelector((state) => state.basket);
 
-  const [status, setStatus] = useState({
-    loading: false,
-    name: "",
-  });
-
-  function handleRemoveItem(
+  const handleRemoveItem = (
     productId: number,
     name: string,
     quantity: number = 1
-  ) {
-    setStatus({ loading: true, name });
-    agent.Basket.removeBasket(productId, quantity)
-      .then(() => removeItem(productId, quantity))
-      .catch((error) => console.log(error))
-      .finally(() => setStatus({ loading: false, name: "" }));
-  }
+  ) => dispatch(removeBasketItemAsync({ productId, quantity, name }));
 
-  function handleAddItem(productId: number, name: string) {
-    setStatus({ loading: true, name });
-    agent.Basket.addBasket(productId)
-      .then((basket) => setBasket(basket))
-      .catch((error) => console.log(error))
-      .finally(() => setStatus({ loading: false, name: "" }));
-  }
+  const handleAddItem = (productId: number, name: string) =>
+    dispatch(addBasketItemAsync({ productId }));
 
   return (
     <>
@@ -104,24 +95,15 @@ const BasketPage = () => {
                   <TableCell align="center">
                     <LoadingButton
                       loading={
-                        status.loading &&
-                        status.name === "rem" + item.productId.toString()
+                        status === "pendingRemoveItem" + item.productId + "rem"
                       }
-                      onClick={() =>
-                        handleRemoveItem(
-                          item.productId,
-                          "rem" + item.productId.toString()
-                        )
-                      }
+                      onClick={() => handleRemoveItem(item.productId, "rem")}
                     >
                       <Remove />
                     </LoadingButton>
                     {item.quantity}
                     <LoadingButton
-                      loading={
-                        status.loading &&
-                        status.name === "add" + item.productId.toString()
-                      }
+                      loading={status === "pendingAddItem" + item.productId}
                       onClick={() =>
                         handleAddItem(
                           item.productId,
@@ -137,17 +119,11 @@ const BasketPage = () => {
                   </TableCell>
                   <TableCell align="right">
                     <LoadingButton
-                      loading={
-                        status.loading &&
-                        status.name === "del" + item.productId.toString()
-                      }
+                      loading={status === "pendingRemoveItem" + item.productId + "del"}
                       onClick={() =>
-                        handleRemoveItem(
-                          item.productId,
-                          "del" + item.productId.toString(),
-                          item.quantity
-                        )
+                        handleRemoveItem(item.productId, "del", item.quantity)
                       }
+                      color="error"
                     >
                       <Delete />
                     </LoadingButton>

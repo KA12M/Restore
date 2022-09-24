@@ -13,9 +13,9 @@ import {
   Switch,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { NavLink } from "react-router-dom";
-import { useStoreContext } from "../context/StroeContext";
+import { NavLink } from "react-router-dom"; 
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../store/store.config";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -40,10 +40,12 @@ const navStyles = {
   },
 };
 
-const Header = ({ handleMode, themeMode }: any) => {
-  const { basket } = useStoreContext();
+const Header = ({ handleMode, themeMode, history }: any) => {
+  // from useStoreContext();
+  // const { basket } = useStoreContext();
+  const { basket } = useAppSelector((state) => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
-  
+
   const SwitchChangeTheme = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
@@ -102,7 +104,7 @@ const Header = ({ handleMode, themeMode }: any) => {
   }));
 
   return (
-    <Box sx={{ flexGrow: 1, mb: 10 }}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar
           sx={{
@@ -121,9 +123,11 @@ const Header = ({ handleMode, themeMode }: any) => {
             >
               <SwitchChangeTheme checked={themeMode} onChange={handleMode} />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Beaver Store
-            </Typography>
+            <IconButton component={Link} to="/">
+              <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                Beaver Store
+              </Typography>
+            </IconButton>
           </Box>
 
           <List sx={{ display: "flex" }}>
@@ -140,7 +144,12 @@ const Header = ({ handleMode, themeMode }: any) => {
           </List>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton component={Link} to="/basketpage" aria-label="cart" color="default">
+            <IconButton
+              component={Link}
+              to="/basketpage"
+              aria-label="cart"
+              color="default"
+            >
               <StyledBadge badgeContent={itemCount} color="secondary">
                 <ShoppingCartIcon />
               </StyledBadge>

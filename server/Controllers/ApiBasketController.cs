@@ -39,7 +39,7 @@ namespace server.Controllers
             if (basket == null) basket = CreateBasket();
 
             var product = await context.Products.FindAsync(productId);
-            if (product == null) return NotFound();
+            if (product == null) return BadRequest(new ProblemDetails{Title="Product Not found"});
             
             basket.AddItem(product, quantity);
             var result = await context.SaveChangesAsync() > 0;
