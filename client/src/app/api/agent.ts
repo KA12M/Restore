@@ -1,11 +1,14 @@
 import axios, { AxiosError } from "axios";
-import { Navigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
 import { history } from "../../main";
+import Basket from "./basket.axios";
+import Catalog from "./catalog.axios";
+import TestError from "./test_error.axios";
+import { PaginatedResponse } from "../models/Pagination";
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;          
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 axios.defaults.withCredentials = true;
 
@@ -16,6 +19,10 @@ const ResponseBody = (res: any) => res.data;
 axios.interceptors.response.use(
   async (res) => {
     await sleep();
+    const pagination = res.headers["pagination"]; //ส่งมำจำก ProductController
+    if (pagination) {
+      res.data = new PaginatedResponse(res.data, JSON.parse(pagination));
+    }
     return res;
   },
   (err: AxiosError) => {
@@ -49,35 +56,16 @@ axios.interceptors.response.use(
   }
 );
 
-const req = {
-  get: (url: string) => axios.get(url).then(ResponseBody),
-  post: (url: string, body: object = {}) => axios.post(url, body).then(ResponseBody),
+export const req = {
+  get: (url: string, params?: URLSearchParams) =>
+    axios.get(url, { params }).then(ResponseBody),
+  post: (url: string, body: object = {}) =>
+    axios.post(url, body).then(ResponseBody),
   delete: (url: string) => axios.delete(url).then(ResponseBody),
-};
-
-const Catalog = {
-  list: () => req.get("ApiProducts"),
-  details: (id: number) => req.get(`ApiProducts/${id}`),
-};
-
-const Basket = {
-  getBasket: () => req.get("ApiBasket/GetBasket"),
-  addBasket: (productId: number, quantity: number = 1) => 
-    req.post(`ApiBasket/AddItemToBasket?productId=${productId}&quantity=${quantity}`),
-  removeBasket: (productId: number, quantity: number = 1) => 
-    req.delete(`ApiBasket/RemoveBasketItem?productId=${productId}&quantity=${quantity}`)
-}
-
-const TestError = {
-  get400Error: () => req.get("buggy/GetBadRequest"),
-  get401Error: () => req.get("buggy/GetUnAuthorized"),
-  get404Error: () => req.get("Buggy/GetNotFound"),
-  get500Error: () => req.get("buggy/GetServerError"),
-  getValidationError: () => req.get("buggy/GetValidationError"),
 };
 
 export default {
   Catalog,
   TestError,
-  Basket
+  Basket,
 };

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "cd server && dotnet run --port 7088",
+    "server": "cd server && dotnet watch run --port 7088",
     "client": "yarn --cwd client dev",
     "start": "concurrently -k \"yarn client\" \"yarn server\"",
     "setupserver": "cd server && dotnet restore",

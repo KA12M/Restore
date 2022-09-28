@@ -541,6 +541,11 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/node@^18.7.19":
+  version "18.7.19"
+  resolved "https://registry.npmjs.org/@types/node/-/node-18.7.19.tgz"
+  integrity sha512-Sq1itGUKUX1ap7GgZlrzdBydjbsJL/NSQt/4wkAxUJ7/OS5c2WkoN6WSpWc2Yc5wtKMZOUA0VCs/j2XJadN3HA==
+
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npmjs.org/@types/parse-json/-/parse-json-4.0.0.tgz"
@@ -584,7 +589,7 @@
 
 "@types/react-slick@^0.23.10":
   version "0.23.10"
-  resolved "https://registry.yarnpkg.com/@types/react-slick/-/react-slick-0.23.10.tgz#56126e6e4e95cdce7771535b2811c2c1931a7caa"
+  resolved "https://registry.npmjs.org/@types/react-slick/-/react-slick-0.23.10.tgz"
   integrity sha512-ZiqdencANDZy6sWOWJ54LDvebuXFEhDlHtXU9FFipQR2BcYU2QJxZhvJPW6YK7cocibUiNn+YvDTbt1HtCIBVA==
   dependencies:
     "@types/react" "*"
@@ -607,7 +612,7 @@
 
 "@types/redux-logger@^3.0.9":
   version "3.0.9"
-  resolved "https://registry.yarnpkg.com/@types/redux-logger/-/redux-logger-3.0.9.tgz#9193b3d51bb6ab98d25514ba7764e4f98a64d3ec"
+  resolved "https://registry.npmjs.org/@types/redux-logger/-/redux-logger-3.0.9.tgz"
   integrity sha512-cwYhVbYNgH01aepeMwhd0ABX6fhVB2rcQ9m80u8Fl50ZODhsZ8RhQArnLTkE7/Zrfq4Sz/taNoF7DQy9pCZSKg==
   dependencies:
     redux "^4.0.0"
@@ -754,7 +759,7 @@ debug@^4.1.0:
 
 deep-diff@^0.3.5:
   version "0.3.8"
-  resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
+  resolved "https://registry.npmjs.org/deep-diff/-/deep-diff-0.3.8.tgz"
   integrity sha512-yVn6RZmHiGnxRKR9sJb3iVV2XTF1Ghh2DiWRZ3dMnGc43yUdWWF/kX6lQyk3+P84iprfWKU/8zFTrlkvtFm1ug==
 
 delayed-stream@~1.0.0:
@@ -1239,7 +1244,7 @@ react@^18.2.0:
 
 redux-logger@^3.0.6:
   version "3.0.6"
-  resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
+  resolved "https://registry.npmjs.org/redux-logger/-/redux-logger-3.0.6.tgz"
   integrity sha512-JoCIok7bg/XpqA1JqCqXFypuqBbQzGQySrhFzewB7ThcnysTO30l4VCst86AuB9T9tuT03MAA56Jw2PNhRSNCg==
   dependencies:
     deep-diff "^0.3.5"
@@ -1311,7 +1316,7 @@ semver@^6.3.0:
 
 slick-carousel@^1.8.1:
   version "1.8.1"
-  resolved "https://registry.yarnpkg.com/slick-carousel/-/slick-carousel-1.8.1.tgz#a4bfb29014887bb66ce528b90bd0cda262cc8f8d"
+  resolved "https://registry.npmjs.org/slick-carousel/-/slick-carousel-1.8.1.tgz"
   integrity sha512-XB9Ftrf2EEKfzoQXt3Nitrt/IPbT+f1fgqBdoxO3W/+JYvtEOW6EgxnWfr9GH6nmULv7Y2tPmEX3koxThVmebA==
 
 source-map-js@^1.0.2:

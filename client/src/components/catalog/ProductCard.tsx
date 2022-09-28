@@ -18,7 +18,7 @@ import Product from "../../app/models/Product";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/store/store.config";
-import { addBasketItemAsync } from '../../app/store/basket.slice';
+import { addBasketItemAsync } from "../../app/store/basket.slice"; 
 
 interface Props {
   item: Product;
@@ -26,14 +26,14 @@ interface Props {
 
 const ProductCard = ({ item }: Props) => {
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector((state) => state.basket);
+  const { status } = useAppSelector((state) => state.basket); 
 
   const haddleAddItem = async (productId: number) => {
-    dispatch(addBasketItemAsync({productId}));
+    dispatch(addBasketItemAsync({ productId }));
   };
 
   return (
-    <Grid item lg={4} md={4} sm={6} xs={12}>
+    <>
       <Card
         sx={{
           maxWidth: "100%",
@@ -89,7 +89,7 @@ const ProductCard = ({ item }: Props) => {
           </Button>
         </CardActions>
       </Card>
-    </Grid>
+    </>
   );
 };
 
