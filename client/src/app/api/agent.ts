@@ -7,6 +7,8 @@ import Basket from "./basket.axios";
 import Catalog from "./catalog.axios";
 import TestError from "./test_error.axios";
 import { PaginatedResponse } from "../models/Pagination";
+import Account from "./account";
+import { store } from "../store/store.config";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -15,6 +17,12 @@ axios.defaults.withCredentials = true;
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 const ResponseBody = (res: any) => res.data;
+
+axios.interceptors.request.use((config: any) => {
+  const token = store.getState().account.user?.token; //เรียกใช้ State โดยตรง
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 axios.interceptors.response.use(
   async (res) => {
@@ -68,4 +76,5 @@ export default {
   Catalog,
   TestError,
   Basket,
+  Account,
 };

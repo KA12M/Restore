@@ -13,9 +13,10 @@ import {
   Switch,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { NavLink } from "react-router-dom"; 
+import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../store/store.config";
+import SignedinMenu from "./SigninMenu";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -43,6 +44,7 @@ const navStyles = {
 const Header = ({ handleMode, themeMode, history }: any) => {
   // from useStoreContext();
   // const { basket } = useStoreContext();
+  const { user } = useAppSelector((state) => state.account);
   const { basket } = useAppSelector((state) => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -153,19 +155,24 @@ const Header = ({ handleMode, themeMode, history }: any) => {
               <StyledBadge badgeContent={itemCount} color="secondary">
                 <ShoppingCartIcon />
               </StyledBadge>
-            </IconButton>
-            <List sx={{ display: "flex" }}>
-              {rightLinks.map(({ title, path }: any, index) => (
-                <ListItem
-                  key={index}
-                  component={NavLink}
-                  to={path}
-                  sx={navStyles}
-                >
-                  {title}
-                </ListItem>
-              ))}
-            </List>
+            </IconButton> 
+             
+            {user ? (
+              <SignedinMenu />
+            ) : (
+              <List sx={{ display: "flex" }}>
+                {rightLinks.map(({ title, path }: any, index) => (
+                  <ListItem
+                    key={index}
+                    component={NavLink}
+                    to={path}
+                    sx={navStyles}
+                  >
+                    {title}
+                  </ListItem>
+                ))}
+              </List>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

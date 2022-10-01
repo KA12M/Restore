@@ -1,6 +1,13 @@
 using server.Data;
 using Microsoft.EntityFrameworkCore;
 using server.Middleware;
+using Microsoft.AspNetCore.Identity;
+using server.Entities;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using server.services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<StoreContext>(options =>
 {
@@ -31,16 +37,80 @@ builder.Services.AddCors(options =>
 });
 #endregion
 
+#region Identityสร้างเซอร์วิส User,Role (ระวังการเรียงล าดับ)
+builder.Services.AddIdentityCore<User>(opt =>
+{
+    opt.User.RequireUniqueEmail = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<StoreContext>();
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+#endregion
+
+#region Use Token
+//ยืนยัน Token ที่ได้รับว่าถูกต้องหรือไม่บนเซิฟเวอร์
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+    .GetBytes(builder.Configuration["JWTSettings:TokenKey"]))
+    };
+});
+
+builder.Services.AddScoped<TokenService>();
+#endregion 
+
+#region Swagger Config
+builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Restore", Version = "v9999" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference{
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme,
+                            },
+                            Scheme = "Bearer",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
+            });
+#endregion
+
 var app = builder.Build();
 
 #region //สร้ำงข้อมูลจ ำลอง Fake data
 using var scope = app.Services.CreateScope(); //using หลังท ำงำนเสร็จจะถูกท ำลำยจำกMemory
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
 {
     await context.Database.MigrateAsync(); //สร้ำง DB ให้อัตโนมัติถ้ำยังไม่มี
-    await DbInitializer.Initialize(context); //สร้ำงข้อมูลสินค้ำจ ำลอง
+    await DbInitializer.Initialize(context, userManager); //สร้ำงข้อมูลสินค้ำจ ำลอง
 }
 catch (Exception ex)
 {
@@ -65,6 +135,7 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseDefaultFiles(); // อนุญาตให้เรียกไฟล์ต่างๆ ใน wwwroot
 app.UseStaticFiles();  // อนุญาตให้เข้าถึงไฟล์ค่าคงที่ได้
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

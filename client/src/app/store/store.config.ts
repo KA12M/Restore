@@ -7,6 +7,7 @@ import testSlice from "./test.slice";
 import homeSlice from "./home.slice";
 import basketSlice from "./basket.slice";
 import catalogSlice from "./catalog.slice";
+import accountSlice from "./account.slice";
 
 //configureStore เป็นของ redux toolkits ท ำหน้ำที่รวบรวม Slice/Reducer
 export const store = configureStore({
@@ -16,8 +17,9 @@ export const store = configureStore({
     screen: homeSlice,
     basket: basketSlice,
     catalog: catalogSlice,
+    account: accountSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 
 //เป็นค่ำ Default ที่มีอยู่ใน store คือ store.getState, store.dispatch (ใช้ตามรูปแบบเขาเลย)

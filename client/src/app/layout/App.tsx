@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { Container } from "@mui/system";
 import { Route, Routes } from "react-router-dom";
@@ -11,32 +11,36 @@ import AboutPage from "../../components/about/AboutPage";
 import ProductDetail from "./../../components/catalog/ProductDetail";
 import NotFound from "./../errors/NotFound";
 import ServerError from "../errors/ServerError";
-import { useStoreContext } from "../context/StroeContext";
-import { getCookie } from "../utility/uitl";
-import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import BasketPage from "../../components/basket/basketPage";
 import CheckoutPage from "../../components/checkout/checkoutPage";
-import { useAppSelector, useAppDispatch } from "../store/store.config"; 
-import { setBasket } from '../store/basket.slice';
+import { useAppSelector, useAppDispatch } from "../store/store.config";
+import { fetchBasketAsync } from "../store/basket.slice";
+import Login from "../../components/account/login";
+import Register from "../../components/account/register";
+import { fetchCurrentUser } from "../store/account.slice";
+import { PrivateLogin, PrivateRoute } from "./PrivateRoute";
 
 const App = () => {
   // from useStoreContext();
   // const { setBasket } = useStoreContext();
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   const dispatch = useAppDispatch();
   const { fullscreen } = useAppSelector((state) => state.screen);
 
-  useEffect(() => {
-    const buyerId = getCookie("buyerId");
-    if (buyerId) {
-      agent.Basket.getBasket()
-        .then((basket) => dispatch(setBasket(basket)))
-        .catch((error) => console.log(error))
-        .finally(() => setLoading(false));
-    } else setLoading(false);
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    } catch (error) {
+      console.log(error);
+    }
   }, [dispatch]);
+
+  useEffect(() => {
+    initApp().then(() => setLoading(false));
+  }, [initApp]);
 
   const [themeMode, setThemeMode] = useState(false);
 
@@ -55,10 +59,22 @@ const App = () => {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/catalog" element={<Catalog />} />
       <Route path="/catalog/:id" element={<ProductDetail />} />
-      <Route path="/basketpage" element={<BasketPage />} />
-      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/basketpage" element={<BasketPage />} /> 
+      <Route path="/register" element={<Register />} />
       <Route path="/server-error" element={<ServerError />} />
       <Route path="*" element={<NotFound />} />
+
+      <Route element={<PrivateRoute />}>
+        <Route path="/checkout" element={<CheckoutPage />} />
+      </Route>
+      <Route
+        path="/login"
+        element={
+          <PrivateLogin>
+            <Login />
+          </PrivateLogin>
+        }
+      />
     </Routes>
   );
 
