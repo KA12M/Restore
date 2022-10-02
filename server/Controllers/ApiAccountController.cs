@@ -84,6 +84,16 @@ namespace server.Controllers
             };
         }
 
+        [Authorize] //Token ถูกแนบมากับ axios.interceptors.request
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await _userManager.Users
+                .Where(x => x.UserName == User.Identity.Name)
+                .Select(user => user.Address)
+                .FirstOrDefaultAsync();
+        }
+
         private async Task<Basket> RetrieveBasket(string buyerId)
         {
             if (string.IsNullOrEmpty(buyerId))
@@ -92,9 +102,9 @@ namespace server.Controllers
                 return null;
             }
             var basket = await _context.Baskets
-            .Include(i => i.Items)
-            .ThenInclude(p => p.Product)
-            .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
+                .Include(i => i.Items)
+                    .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
             return basket;
         }
     }

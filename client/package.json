@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@hookform/resolvers": "^2.9.8",
     "@mui/icons-material": "^5.10.2",
     "@mui/lab": "^5.0.0-alpha.99",
     "@mui/material": "^5.10.2",
@@ -27,7 +28,8 @@
     "react-toastify": "^9.0.8",
     "redux": "^4.2.0",
     "redux-logger": "^3.0.6",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "^18.7.19",
@@ -39,3 +41,6 @@
     "vite": "^3.0.7"
   }
 }
+
+
+

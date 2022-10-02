@@ -20,6 +20,7 @@ import Login from "../../components/account/login";
 import Register from "../../components/account/register";
 import { fetchCurrentUser } from "../store/account.slice";
 import { PrivateLogin, PrivateRoute } from "./PrivateRoute";
+import OrderPage from "../../components/order/orderPage";
 
 const App = () => {
   // from useStoreContext();
@@ -66,7 +67,9 @@ const App = () => {
 
       <Route element={<PrivateRoute />}>
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/order" element={<OrderPage/>}/>
       </Route>
+      
       <Route
         path="/login"
         element={

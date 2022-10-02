@@ -69,7 +69,7 @@ namespace server.Controllers
             }
             var basket = await context.Baskets
                 .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
+                    .ThenInclude(p => p.Product)
                 .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
             return basket;
         }

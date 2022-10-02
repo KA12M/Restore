@@ -29,8 +29,7 @@ namespace server.Extenstions
             };
         }
 
-        public static IQueryable<Basket> RetrieveBasketWithItems(this IQueryable<Basket> query,
-        string buyerId)
+        public static IQueryable<Basket> RetrieveBasketWithItems(this IQueryable<Basket> query, string buyerId)
         {
             return query.Include(i => i.Items).ThenInclude(p => p.Product).Where(b => b.BuyerId == buyerId);
         }

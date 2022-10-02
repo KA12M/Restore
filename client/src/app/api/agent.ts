@@ -9,6 +9,7 @@ import TestError from "./test_error.axios";
 import { PaginatedResponse } from "../models/Pagination";
 import Account from "./account";
 import { store } from "../store/store.config";
+import Order from "./order";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
@@ -77,4 +78,5 @@ export default {
   TestError,
   Basket,
   Account,
+  Order
 };

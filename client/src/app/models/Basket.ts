@@ -12,4 +12,4 @@ export interface BasketItem {
   brand: string;
   type: string;
   quantity: number;
-}
+} 
