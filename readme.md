@@ -1,4 +1,4 @@
-<h1>key setting stripe</h1>
+# key setting stripe 
 
 # PublishableKey
 dotnet user-secrets set "StripeSettings:PublishableKey" "pk_test_51LjD7TCnsAshMZPBrTNbZL8lasYcovCPjgeMvIbOQZ2QSJjCMwrU505v8NcknT9L15cEhLCRb4e4BRsdi6y8Dz9i00Z9virDYw"
