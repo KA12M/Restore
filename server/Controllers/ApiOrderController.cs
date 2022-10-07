@@ -81,6 +81,7 @@ namespace server.Controllers
                 ShippingAddress = orderDto.ShippingAddress,
                 Subtotal = subtotal,
                 DeliveryFee = deliveryFee,
+                PaymentIntentId = basket.PaymentIntentId
             };
             _context.Orders.Add(order); //สร้าง Order และ OrderItem ในขั้นตอนเดียว
             _context.Baskets.Remove(basket); //ลบ Basket และ BasketItem ในขั้นตอนเดียว

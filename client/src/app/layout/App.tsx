@@ -12,8 +12,7 @@ import ProductDetail from "./../../components/catalog/ProductDetail";
 import NotFound from "./../errors/NotFound";
 import ServerError from "../errors/ServerError";
 import LoadingComponent from "./LoadingComponent";
-import BasketPage from "../../components/basket/basketPage";
-import CheckoutPage from "../../components/checkout/checkoutPage";
+import BasketPage from "../../components/basket/basketPage"; 
 import { useAppSelector, useAppDispatch } from "../store/store.config";
 import { fetchBasketAsync } from "../store/basket.slice";
 import Login from "../../components/account/login";
@@ -21,6 +20,7 @@ import Register from "../../components/account/register";
 import { fetchCurrentUser } from "../store/account.slice";
 import { PrivateLogin, PrivateRoute } from "./PrivateRoute";
 import OrderPage from "../../components/order/orderPage";
+import CheckoutWrapper from '../../components/checkout/CheckoutWrapper';
 
 const App = () => {
   // from useStoreContext();
@@ -66,7 +66,7 @@ const App = () => {
       <Route path="*" element={<NotFound />} />
 
       <Route element={<PrivateRoute />}>
-        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/checkout" element={<CheckoutWrapper />} />
         <Route path="/order" element={<OrderPage/>}/>
       </Route>
       

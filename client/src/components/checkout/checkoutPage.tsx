@@ -12,53 +12,138 @@ import Review from "./Review";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { validationSchema } from "./checkValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAppDispatch } from "../../app/store/store.config";
+import { useAppDispatch, useAppSelector } from "../../app/store/store.config";
 import agent from "../../app/api/agent";
 import { clearBasket } from "../../app/store/basket.slice";
 import { LoadingButton } from "@mui/lab";
+import { StripeElementType } from "@stripe/stripe-js";
+import { useEffect, useState } from "react";
+import {
+  CardNumberElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
 
 const steps = ["Shipping address", "Review your order", "Payment details"];
-
-const GetStepContent = (step: number) => {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <Review />;
-    case 2:
-      return <PaymentForm />;
-    default:
-      throw new Error("Unknown step");
-  }
-};
 
 export default function checkoutPage() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const [orderNumber, setOrderNumber] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
-  const dispatch = useAppDispatch(); 
+  const dispatch = useAppDispatch();
 
-  const handleNext = async (data: FieldValues) => {
-    //ถ้าบางตัวยังไม่มีจะเป็น undefined
-    const { nameOnCard, saveAddress, ...shippingAddress } = data;
+  const [cardState, setCardState] = React.useState<{
+    elementError: { [key in StripeElementType]?: string };
+  }>({ elementError: {} });
+  
+  const [cardComplete, setCardComplete] = React.useState<any>({
+    cardNumber: false,
+    cardExpiry: false,
+    cardCvc: false,
+  });
+
+  //#region เตรียมข้อมูลส าหรับการยืนยัน Order และ Stripe
+  const [paymentMessage, setPaymentMessage] = useState("");
+  const [paymentSucceeded, setPaymentSucceeded] = useState(false);
+  const { basket } = useAppSelector((state) => state.basket);
+  const stripe = useStripe();
+  const elements = useElements(); //ส าหรับอ่านข้อมูลบัตรเครดิต
+  //#endregion
+
+  function onCardInputChange(event: any) {
+    setCardState({
+      ...cardState,
+      elementError: {
+        ...cardState.elementError,
+        [event.elementType]: event.error?.message,
+      },
+    });
+    setCardComplete({ ...cardComplete, [event.elementType]: event.complete });
+  }
+
+  function submitDisabled(): boolean {
     if (activeStep === steps.length - 1) {
-      setLoading(true); //ขณะที่ไป api
-      try {
+      return (
+        !cardComplete.cardCvc ||
+        !cardComplete.cardExpiry ||
+        !cardComplete.cardNumber ||
+        !methods.formState.isValid
+      );
+    } else {
+      return !methods.formState.isValid;
+    }
+  }
+
+  const GetStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return <AddressForm />;
+      case 1:
+        return <Review />;
+      case 2:
+        return (
+          <PaymentForm
+            cardState={cardState}
+            onCardInputChange={onCardInputChange}
+          />
+        );
+      default:
+        throw new Error("Unknown step");
+    }
+  };
+
+  // #region ท าการสร้าง Order โดยปรับปรุงท้ัง Order และ Stripe.com
+  async function submitOrder(data: FieldValues) {
+    setLoading(true);
+    const { nameOnCard, saveAddress, ...shippingAddress } = data;
+    
+    if (!stripe || !elements) return; // stripe not ready
+    try {
+      const cardElement = elements.getElement(CardNumberElement);
+      const paymentResult = await stripe.confirmCardPayment(
+        basket?.clientSecret!,
+        {
+          payment_method: {
+            card: cardElement!,
+            billing_details: {
+              name: nameOnCard,
+            },
+          },
+        }
+      );
+      console.log(paymentResult);
+      if (paymentResult.paymentIntent?.status === "succeeded") {
         const orderNumber = await agent.Order.create({
           saveAddress,
           shippingAddress,
         });
         setOrderNumber(orderNumber);
+        setPaymentSucceeded(true);
+        setPaymentMessage("Thank you - we have received your payment");
         setActiveStep(activeStep + 1);
         dispatch(clearBasket());
         setLoading(false);
-      } catch (error) {
-        console.log(error);
+      } else {
+        setPaymentMessage(paymentResult.error?.message!);
+        setPaymentSucceeded(false);
         setLoading(false);
+        setActiveStep(activeStep + 1);
       }
-    } else setActiveStep(activeStep + 1);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  }
+
+  const handleNext = async (data: FieldValues) => {
+    if (activeStep === steps.length - 1) {
+      await submitOrder(data);
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
+  // #endregion
 
   const handleBack = () => setActiveStep(activeStep - 1);
 
@@ -70,7 +155,7 @@ export default function checkoutPage() {
   });
 
   //โหลดที่อยู่ของ User
-  React.useEffect(() => {
+  useEffect(() => {
     agent.Account.fetchAddress().then((response) => {
       if (response) {
         //reset ค่าของ Form ,ก าหนด saveAddress: false เพราะโหลดมาแล้ว
@@ -103,13 +188,19 @@ export default function checkoutPage() {
           {activeStep === steps.length ? (
             <React.Fragment>
               <Typography variant="h5" gutterBottom>
-                Thank you for your order.
+                {paymentMessage}
               </Typography>
-              <Typography variant="subtitle1">
-                Your order number is #{orderNumber}. We have not emailed your
-                order confirmation, and will not send you an update when your
-                order has shipped as this is a fake store!.
-              </Typography>
+              {paymentSucceeded ? (
+                <Typography variant="subtitle1">
+                  Your order number is #{orderNumber}. We have not emailed your
+                  order confirmation, and will not send you an update when your
+                  order has shipped as this is a fake store!.
+                </Typography>
+              ) : (
+                <Button variant="contained" onClick={handleBack}>
+                  Go back and try again
+                </Button>
+              )}
             </React.Fragment>
           ) : (
             <form onSubmit={methods.handleSubmit(handleNext)}>
@@ -122,7 +213,7 @@ export default function checkoutPage() {
                 )}
                 <LoadingButton
                   loading={loading}
-                  disabled={!methods.formState.isValid}
+                  disabled={submitDisabled()}
                   variant="contained"
                   type="submit"
                   sx={{ mt: 3, ml: 1 }}

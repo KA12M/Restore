@@ -100,6 +100,10 @@ builder.Services.AddSwaggerGen(c =>
             });
 #endregion
 
+#region PaymentServices Stript
+builder.Services.AddScoped<PaymentService>();
+#endregion
+
 var app = builder.Build();
 
 #region //สร้ำงข้อมูลจ ำลอง Fake data
