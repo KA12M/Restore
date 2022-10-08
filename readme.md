@@ -17,3 +17,6 @@ arjuna.db.elephantsql.com
 dgcjdxvi
 =======
 >>>>>>> 1888427f865a20e006322354b9777b665a069106
+
+dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq
+arjuna.db.elephantsql.com/dgcjdxvi
