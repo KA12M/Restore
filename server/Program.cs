@@ -45,7 +45,7 @@ builder.Services.AddDbContext<StoreContext>(options =>
         var pgDb = part1.Split(":")[0];
         var pgUser = part1.Split(":")[0];
         var pgPass = part1.Split(":")[1];
-        connStr = $"Server={pgHost};User Id={pgUser};Password={pgPass};Database={pgDb};";
+        connStr = $"Server={pgHost};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
         // connStr = $"Server={pgHost};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
     }
     else
