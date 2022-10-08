@@ -33,15 +33,17 @@ builder.Services.AddDbContext<StoreContext>(options =>
         var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
         // Parse connection URL to connection string for Npgsql
         connUrl = connUrl.Replace("postgres://", string.Empty);
-        var pgUserPass = connUrl.Split("@")[0];
-        var pgHostPortDb = connUrl.Split("@")[1];
-        var pgHostPort = pgHostPortDb.Split("/")[0];
-        var pgDb = pgHostPortDb.Split("/")[1];
-        var pgUser = pgUserPass.Split(":")[0];
-        var pgPass = pgUserPass.Split(":")[1];
-        var pgHost = pgHostPort.Split(":")[0];
-        var pgPort = pgHostPort.Split(":")[1];
-        connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
+        var part1 = connUrl.Split("@")[0];
+        var part2 = connUrl.Split("@")[1];
+        var part3 = part2.Split("/")[0]; 
+        // var pgPort = pgHostPort.Split(":")[1];
+
+        var pgHost = part2;
+        var pgDb = part3;
+        var pgUser = part3;
+        var pgPass = part1.Split(":")[1];
+        connStr = $"Server={pgHost};User Id={pgUser};Password={pgPass};Database={pgDb};";
+        // connStr = $"Server={pgHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
     }
     // Whether the connection string came from the local development configuration file
     // or from the environment variable from Heroku, use it to set up your DbContext.
