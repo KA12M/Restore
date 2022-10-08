@@ -41,7 +41,7 @@ builder.Services.AddDbContext<StoreContext>(options =>
         var part2 = connUrl.Split("@")[1];
         // var pgPort = pgHostPort.Split(":")[1];
 
-        var pgHost = part2.Split(":")[0];
+        var pgHost = part2.Split("/")[0];
         var pgDb = part1.Split(":")[0];
         var pgUser = part1.Split(":")[0];
         var pgPass = part1.Split(":")[1];
