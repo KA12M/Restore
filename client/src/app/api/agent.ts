@@ -28,7 +28,7 @@ axios.interceptors.request.use((config: any) => {
 
 axios.interceptors.response.use(
   async (res) => {
-    await sleep();
+    if (import.meta.env.VITE_ENV_MODE === "development") await sleep();
     const pagination = res.headers["pagination"]; //ส่งมำจำก ProductController
     if (pagination) {
       res.data = new PaginatedResponse(res.data, JSON.parse(pagination));

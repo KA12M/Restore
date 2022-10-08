@@ -17,8 +17,7 @@ import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent"; 
 import {
   addBasketItemAsync,
-  removeBasketItemAsync,
-  removeItem,
+  removeBasketItemAsync, 
 } from "../../app/store/basket.slice";
 import {
   fetchProductAsync,
