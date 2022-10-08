@@ -1,22 +1,19 @@
-# key setting stripe 
+# key setting stripe
 
-# PublishableKey
 dotnet user-secrets set "StripeSettings:PublishableKey" "pk_test_51LjD7TCnsAshMZPBrTNbZL8lasYcovCPjgeMvIbOQZ2QSJjCMwrU505v8NcknT9L15cEhLCRb4e4BRsdi6y8Dz9i00Z9virDYw"
 
-# SecretKey
 dotnet user-secrets set "StripeSettings:SecretKey" "sk_test_51LjD7TCnsAshMZPBuuxhCqs9c0sJxJKE5ZCG0qhvgkW8hs7X2tq2PZtjCENTO12oOsPWZwWGGvqUtL3iIwYkXkxG00SWY4UpYa"
 
-# WhSecret
 dotnet user-secrets set "StripeSettings:WhSecret" "whsec_7baf7b1c214a40b7e3f3aa3ca5f028d0a183822560a2343e3bd8e0d471f4a90a"
-<<<<<<< HEAD
+
+# databse connection ProgreSql
 
 postgres://dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq@arjuna.db.elephantsql.com/dgcjdxvi
 
-dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq
-arjuna.db.elephantsql.com
-dgcjdxvi
-=======
->>>>>>> 1888427f865a20e006322354b9777b665a069106
+# https://cloudinary.com
 
-dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq
-arjuna.db.elephantsql.com/dgcjdxvi
+dotnet user-secrets set "Cloudinary:CloudName" "kanchanabury"
+
+dotnet user-secrets set "Cloudinary:ApiKey" "896139949199978"
+
+dotnet user-secrets set "Cloudinary:ApiSecret" "O1yol-nxjbYB4jl3YdjFlB_SPcE"
