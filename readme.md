@@ -10,6 +10,10 @@ dotnet user-secrets set "StripeSettings:WhSecret" "whsec_7baf7b1c214a40b7e3f3aa3
 
 postgres://dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq@arjuna.db.elephantsql.com/dgcjdxvi
 
+dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq
+
+arjuna.db.elephantsql.com/dgcjdxvi
+
 # https://cloudinary.com
 
 dotnet user-secrets set "Cloudinary:CloudName" "kanchanabury"
@@ -17,3 +21,4 @@ dotnet user-secrets set "Cloudinary:CloudName" "kanchanabury"
 dotnet user-secrets set "Cloudinary:ApiKey" "896139949199978"
 
 dotnet user-secrets set "Cloudinary:ApiSecret" "O1yol-nxjbYB4jl3YdjFlB_SPcE"
+
