@@ -8,12 +8,4 @@ dotnet user-secrets set "StripeSettings:SecretKey" "sk_test_51LjD7TCnsAshMZPBuux
 
 # WhSecret
 dotnet user-secrets set "StripeSettings:WhSecret" "whsec_7baf7b1c214a40b7e3f3aa3ca5f028d0a183822560a2343e3bd8e0d471f4a90a"
-<<<<<<< HEAD
 
-postgres://dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq@arjuna.db.elephantsql.com/dgcjdxvi
-
-dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq
-arjuna.db.elephantsql.com
-dgcjdxvi
-=======
->>>>>>> 1888427f865a20e006322354b9777b665a069106
