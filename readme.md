@@ -8,11 +8,7 @@ dotnet user-secrets set "StripeSettings:WhSecret" "whsec_7baf7b1c214a40b7e3f3aa3
 
 # databse connection ProgreSql
 
-postgres://dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq@arjuna.db.elephantsql.com/dgcjdxvi
-
-dgcjdxvi:Di6liUYCaSyrcPjYDgDf0U5AKm_Ur7Oq
-
-arjuna.db.elephantsql.com/dgcjdxvi
+postgres://tmjussah:wrtUP1FaR6fKkKhFja3qMNUgm8Zzp7-R@arjuna.db.elephantsql.com/tmjussah
 
 # https://cloudinary.com
 

@@ -32,7 +32,8 @@ const ProductCard = ({ item }: Props) => {
     dispatch(addBasketItemAsync({ productId }));
   };
 
-  const mapImg = (img: string) => img;
+  const mapImg = (img: string) =>
+    img.split("/")[1] === "images" ? import.meta.env.VITE_API_URL + img : img;
   
   return (
     <>
@@ -69,7 +70,7 @@ const ProductCard = ({ item }: Props) => {
           alt="green iguana"
           height="240"
           sx={{ bgcolor: "skyblue", backgroundSize: "contain" }}
-          image={mapImg(item.pictureUrl)}
+          image={item.pictureUrl}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
