@@ -34,7 +34,7 @@ builder.Services.AddDbContext<StoreContext>(options =>
     if (env == "Production")
     {
         // Use connection string provided at runtime by Heroku.
-        var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL"); 
+        var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
         // Parse connection URL to connection string for Npgsql
         connUrl = connUrl.Replace("postgres://", string.Empty);
         var part1 = connUrl.Split("@")[0];
@@ -49,7 +49,19 @@ builder.Services.AddDbContext<StoreContext>(options =>
         // connStr = $"Server={pgHost};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
     }
     else
-    { 
+    {
+        var connUrl = "postgres://tmjussah:wrtUP1FaR6fKkKhFja3qMNUgm8Zzp7-R@arjuna.db.elephantsql.com/tmjussah";
+        // Parse connection URL to connection string for Npgsql
+        connUrl = connUrl.Replace("postgres://", string.Empty);
+        var part1 = connUrl.Split("@")[0];
+        var part2 = connUrl.Split("@")[1];
+        // var pgPort = pgHostPort.Split(":")[1];
+
+        var pgHost = part2.Split("/")[0];
+        var pgDb = part1.Split(":")[0];
+        var pgUser = part1.Split(":")[0];
+        var pgPass = part1.Split(":")[1];
+        connStr = $"Server={pgHost};User Id={pgUser};Password={pgPass};Database={pgDb};SSL Mode=Require;Trust Server Certificate=true";
         // Use connection string from file.
         connStr = builder.Configuration.GetConnectionString("DatabaseConnection");
     }
