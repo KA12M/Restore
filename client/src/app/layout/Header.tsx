@@ -143,6 +143,12 @@ const Header = ({ handleMode, themeMode, history }: any) => {
                 {title}
               </ListItem>
             ))}
+
+            {user && user.roles?.includes("Admin") && (
+              <ListItem component={NavLink} to={"/inventory"} sx={navStyles}>
+                INVENTORY
+              </ListItem>
+            )}
           </List>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -155,8 +161,8 @@ const Header = ({ handleMode, themeMode, history }: any) => {
               <StyledBadge badgeContent={itemCount} color="secondary">
                 <ShoppingCartIcon />
               </StyledBadge>
-            </IconButton> 
-             
+            </IconButton>
+
             {user ? (
               <SignedinMenu />
             ) : (

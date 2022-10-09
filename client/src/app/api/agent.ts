@@ -11,22 +11,27 @@ import Account from "./account";
 import { store } from "../store/store.config";
 import Order from "./order";
 import Payment from "./payment";
+import Admins from "./admin";
 
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+const options = {
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: { "content-type": "multipart/form-data" },
+  withCredentials: true,
+};
 
-axios.defaults.withCredentials = true;
+const instance = axios.create(options);
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
 const ResponseBody = (res: any) => res.data;
 
-axios.interceptors.request.use((config: any) => {
+instance.interceptors.request.use((config: any) => {
   const token = store.getState().account.user?.token; //เรียกใช้ State โดยตรง
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-axios.interceptors.response.use(
+instance.interceptors.response.use(
   async (res) => {
     if (import.meta.env.VITE_ENV_MODE === "development") await sleep();
     const pagination = res.headers["pagination"]; //ส่งมำจำก ProductController
@@ -38,7 +43,7 @@ axios.interceptors.response.use(
   (err: AxiosError) => {
     var data = err.response?.data;
     var json = JSON.stringify(data);
-    var result = JSON.parse(json);
+    var result = JSON.parse(json); 
 
     switch (result.status) {
       case 400:
@@ -52,6 +57,9 @@ axios.interceptors.response.use(
         break;
       case 401:
         toast.error(result.title);
+        break;
+      case 403:
+        toast.error('You are not allowed to do that!');                           
         break;
       case 404:
         toast.error(result.title);
@@ -68,11 +76,29 @@ axios.interceptors.response.use(
 
 export const req = {
   get: (url: string, params?: URLSearchParams) =>
-    axios.get(url, { params }).then(ResponseBody),
+    instance.get(url, { params }).then(ResponseBody),
   post: (url: string, body: object = {}) =>
-    axios.post(url, body).then(ResponseBody),
-  delete: (url: string) => axios.delete(url).then(ResponseBody),
+    instance
+      .post(url, body, {
+        headers: { "Content-type": "application/json" },
+      })
+      .then(ResponseBody),
+  put: (url: string, body: {}) => instance.put(url, body).then(ResponseBody),
+  delete: (url: string) => instance.delete(url).then(ResponseBody),
+
+  postForm: (url: string, data: FormData) =>
+    instance.post(url, data).then(ResponseBody),
+  putForm: (url: string, data: FormData) =>
+    instance.put(url, data).then(ResponseBody),
 };
+
+export function createFormData(item: any) {
+  let formData = new FormData();
+  for (const key in item) {
+    formData.append(key, item[key]);
+  }
+  return formData;
+}
 
 export default {
   Catalog,
@@ -80,5 +106,6 @@ export default {
   Basket,
   Account,
   Order,
-  Payment
+  Payment,
+  Admins,
 };

@@ -18,7 +18,7 @@ import Product from "../../app/models/Product";
 import { Link } from "react-router-dom";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch, useAppSelector } from "../../app/store/store.config";
-import { addBasketItemAsync } from "../../app/store/basket.slice"; 
+import { addBasketItemAsync } from "../../app/store/basket.slice";
 
 interface Props {
   item: Product;
@@ -26,12 +26,15 @@ interface Props {
 
 const ProductCard = ({ item }: Props) => {
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector((state) => state.basket); 
+  const { status } = useAppSelector((state) => state.basket);
 
   const haddleAddItem = async (productId: number) => {
     dispatch(addBasketItemAsync({ productId }));
   };
 
+  const mapImg = (img: string) =>
+    img.split("/")[1] === "images" ? import.meta.env.VITE_API_URL + img : img;
+  
   return (
     <>
       <Card
@@ -63,10 +66,11 @@ const ProductCard = ({ item }: Props) => {
         />
         <CardMedia
           component="img"
+          loading="lazy"
           alt="green iguana"
           height="240"
           sx={{ bgcolor: "skyblue", backgroundSize: "contain" }}
-          image={import.meta.env.VITE_API_URL + item.pictureUrl}
+          image={mapImg(item.pictureUrl)}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
