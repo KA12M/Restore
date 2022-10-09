@@ -32,8 +32,7 @@ const ProductCard = ({ item }: Props) => {
     dispatch(addBasketItemAsync({ productId }));
   };
 
-  const mapImg = (img: string) =>
-    img.split("/")[1] === "images" ? import.meta.env.VITE_API_URL + img : img;
+  const mapImg = (img: string) => img;
   
   return (
     <>
