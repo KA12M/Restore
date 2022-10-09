@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace server.DTOS
 {
     public class CreateProductDTOS
-    {
+    { 
         [Required]
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
-        [Range(100, Double.PositiveInfinity)]
-        public long Price { get; set; }
+        // [Range(100, Double.PositiveInfinity)]
+        public int Price { get; set; }
         [Required]
         public IFormFile File { get; set; }
         [Required]

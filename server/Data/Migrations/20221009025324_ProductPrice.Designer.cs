@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using server.Data;
@@ -11,9 +12,10 @@ using server.Data;
 namespace server.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20221009025324_ProductPrice")]
+    partial class ProductPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,14 +299,14 @@ namespace server.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "687f335d-2c53-4b72-bbe6-175620afd31e",
+                            ConcurrencyStamp = "b17c4b3b-85c7-479c-af96-83ce0b9f2aef",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "4aa9d564-84aa-4fc2-a7d2-2383fbfc1a7f",
+                            ConcurrencyStamp = "839249bb-ea3c-4b80-996f-07bf4a02c61c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

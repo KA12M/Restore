@@ -73,11 +73,14 @@ const ProductDetail = () => {
     return <LoadingComponent message="Loading Product....." />;
   else if (!data) return <NotFound />;
 
+  const mapImg = (img: string) =>
+    img.split("/")[1] === "images" ? import.meta.env.VITE_API_URL + img : img;
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={6}>
         <img
-          src={import.meta.env.VITE_API_URL + data.pictureUrl}
+          src={mapImg(data.pictureUrl)}
           style={{ width: "100%" }}
         />
       </Grid>

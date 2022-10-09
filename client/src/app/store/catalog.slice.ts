@@ -115,6 +115,14 @@ export const catalogSlice = createSlice({
       state.productsLoaded = false;
       state.productParams = { ...state.productParams, ...action.payload };
     },
+    setProduct: (state, action) => {
+      productsAdapter.upsertOne(state, action.payload);
+      state.productsLoaded = false;
+    },
+    removeProduct: (state, action) => {
+      productsAdapter.removeOne(state, action.payload); //มีไว้ท าอะไร
+      state.productsLoaded = false; //state เปลี่ยนไปท าการโหลดข้อมูลมาใหม่ที่ useProduct.tsx
+    },
   },
   extraReducers: (builder) => {
     //#region TODO: fetchProductsAsync
@@ -170,6 +178,8 @@ export const {
   resetProductParams,
   setMetaData,
   setPageNumber,
+  setProduct,
+  removeProduct,
 }: typeof catalogSlice.actions = catalogSlice.actions;
 
 export default catalogSlice.reducer;

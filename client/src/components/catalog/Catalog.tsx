@@ -26,6 +26,7 @@ import ProductSearch from "./ProductSearach";
 import RadioButtonGroup from "../RadioButtonGroup";
 import CheckboxButtons from "../CheckBoxButton";
 import AppPagination from "../AppPagination";
+import useProducts from "../../app/hook/useProduct";
 
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
@@ -34,28 +35,12 @@ const sortOptions = [
 ];
 
 const Catalog = () => {
-  const data = useAppSelector(productSelectors.selectAll);
-  const {
-    productsLoaded,
-    status,
-    filtersLoaded,
-    brands,
-    types,
-    productParams,
-    metaData,
-  } = useAppSelector((state) => state.catalog);
+  const { productParams } = useAppSelector((state) => state.catalog);
   const dispatch = useAppDispatch();
+  
+  const { data, brands, types, filtersLoaded, metaData } = useProducts();
 
-  useEffect(() => {
-    if (!productsLoaded) dispatch(fetchProductsAsync());
-  }, [productsLoaded, dispatch]);
-
-  useEffect(() => {
-    if (!filtersLoaded) dispatch(fetchFilters());
-  }, [filtersLoaded, dispatch]);
-
-  if (!filtersLoaded)
-    return <LoadingComponent message="Loading Products..." />;
+  if (!filtersLoaded) return <LoadingComponent message="Loading Products..." />;
 
   return (
     <Grid container columnSpacing={4}>
@@ -92,7 +77,7 @@ const Catalog = () => {
               dispatch(setProductParams({ types: items }))
             }
           />
-        </Paper> 
+        </Paper>
       </Grid>
       <Grid xs={9} item>
         <ProductList products={data} />

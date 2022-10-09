@@ -19,18 +19,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 #region Cloudinary
-	builder.Services.AddScoped<ImageService>();
+builder.Services.AddScoped<ImageService>();
 #endregion
 
 #region AutoMapper
-	builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 #endregion
 
 #region เชื่อมต่อไปยัง heroku Server และใช้ค่าที่ config ไว้แล้วในฝั่ง Heroku
 builder.Services.AddDbContext<StoreContext>(options =>
 {
     var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-    string connStr; 
+    string connStr;
     if (env == "Production")
     {
         // Use connection string provided at runtime by Heroku.
@@ -79,7 +79,7 @@ builder.Services.AddCors(options =>
                             policy.AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials()
-                            .WithOrigins("http://localhost:3001", "http://127.0.0.1:3001");
+                            .SetIsOriginAllowed(origin => true);
                         });
 });
 #endregion

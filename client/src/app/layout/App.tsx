@@ -21,6 +21,7 @@ import { fetchCurrentUser } from "../store/account.slice";
 import { PrivateLogin, PrivateRoute } from "./PrivateRoute";
 import OrderPage from "../../components/order/orderPage";
 import CheckoutWrapper from '../../components/checkout/CheckoutWrapper';
+import Inventory from "../../components/admin/inventory";
 
 const App = () => {
   // from useStoreContext();
@@ -67,7 +68,10 @@ const App = () => {
 
       <Route element={<PrivateRoute />}>
         <Route path="/checkout" element={<CheckoutWrapper />} />
-        <Route path="/order" element={<OrderPage/>}/>
+        <Route path="/order" element={<OrderPage/>}/> 
+      </Route>
+      <Route element={<PrivateRoute roles={['Admin']}/>}> 
+        <Route path="/inventory" element={<Inventory />}/>
       </Route>
       
       <Route
