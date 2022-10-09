@@ -8,14 +8,14 @@ import Catalog from "./catalog.axios";
 import TestError from "./test_error.axios";
 import { PaginatedResponse } from "../models/Pagination";
 import Account from "./account";
-import { store } from "../store/store.config";
-import Order from "./order";
+import { store } from "../store/store.config"; 
 import Payment from "./payment";
 import Admins from "./admin";
+import Order from "./order";
 
 const options = {
   baseURL: import.meta.env.VITE_API_URL,
-  headers: { "content-type": "multipart/form-data" },
+  headers: { "Content-type": "application/json" },
   withCredentials: true,
 };
 
@@ -43,7 +43,7 @@ instance.interceptors.response.use(
   (err: AxiosError) => {
     var data = err.response?.data;
     var json = JSON.stringify(data);
-    var result = JSON.parse(json); 
+    var result = JSON.parse(json);
 
     switch (result.status) {
       case 400:
@@ -59,7 +59,7 @@ instance.interceptors.response.use(
         toast.error(result.title);
         break;
       case 403:
-        toast.error('You are not allowed to do that!');                           
+        toast.error("You are not allowed to do that!");
         break;
       case 404:
         toast.error(result.title);
@@ -78,18 +78,14 @@ export const req = {
   get: (url: string, params?: URLSearchParams) =>
     instance.get(url, { params }).then(ResponseBody),
   post: (url: string, body: object = {}) =>
-    instance
-      .post(url, body, {
-        headers: { "Content-type": "application/json" },
-      })
-      .then(ResponseBody),
+    instance.post(url, body).then(ResponseBody),
   put: (url: string, body: {}) => instance.put(url, body).then(ResponseBody),
   delete: (url: string) => instance.delete(url).then(ResponseBody),
 
   postForm: (url: string, data: FormData) =>
-    instance.post(url, data).then(ResponseBody),
+    instance.post(url, data, {headers: { "content-type": "multipart/form-data" },}).then(ResponseBody),
   putForm: (url: string, data: FormData) =>
-    instance.put(url, data).then(ResponseBody),
+    instance.put(url, data, {headers: { "content-type": "multipart/form-data" },}).then(ResponseBody),
 };
 
 export function createFormData(item: any) {
